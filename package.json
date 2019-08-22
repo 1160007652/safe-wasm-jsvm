@@ -1,0 +1,21 @@
+{
+  "name": "anti-counterfeiting-code",
+  "version": "1.0.0",
+  "description": "wasm 安全码 校验",
+  "main": "index.js",
+  "scripts": {
+    "asm": "./config/asm_build.sh",
+    "wasm": "./config/wasm_build.sh",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.okcoin-inc.com:okfe/util/anti-counterfeiting-code.git"
+  },
+  "keywords": [
+    "wasm",
+    "安全码"
+  ],
+  "author": "zhipan.liu@okcoin.net",
+  "license": "ISC"
+}
