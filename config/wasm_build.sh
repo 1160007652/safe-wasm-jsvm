@@ -2,6 +2,9 @@
 
 set -e
 
+export inputFile="./src-wasm/main.cpp"
+export outputFile="./public/build/main-wasm.js"
+
 export OPTIMIZE="-Oz -Wall -Werror --llvm-lto 1 -fno-exceptions"
 export LDFLAGS="${OPTIMIZE}"
 export CFLAGS="${OPTIMIZE}"
@@ -15,7 +18,7 @@ echo -e "\033[1A"
 (
   # Compile C/C++ code
   docker run --rm -it -v `pwd`:/src apiaryio/emcc emcc \
-    ./src-wasm/main.cpp \
+    ${inputFile} \
     ${OPTIMIZE} \
     -s MALLOC=emmalloc \
     -s STRICT=1 \
@@ -28,7 +31,7 @@ echo -e "\033[1A"
     -s WASM=1 \
     --memory-init-file 0 \
     --bind \
-    -o build/main-wasm.js
+    -o ${outputFile}
 )
 
 #  -s MALLOC=emmalloc
@@ -39,7 +42,14 @@ echo -e "\033[1A"
 #  -s FILESYSTEM=0  是否启用文件系统
 
 echo -e "\033[32m[ wasm ] 构建完成   \033[0m"
-echo -e "\033[32m[ Path ] ./build/main-wasm.js   \033[0m"
+echo -e "\033[32m[ Path ] ${outputFile}   \033[0m"
+
+echo -e "\033[32m[ wasm ] Gzip压缩   \033[0m"
+echo -e "\033[1A"
+(
+  gzip -n -c ${outputFile} > ${outputFile}.gz
+)
+echo -e "\033[32m[ Path ] ${outputFile}.gz   \033[0m"
 
 echo ''
 echo -e "\033[44;37m ============================================= \033[0m"

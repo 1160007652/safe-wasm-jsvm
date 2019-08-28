@@ -2,6 +2,9 @@
 
 set -e
 
+export inputFile="./src-wasm/main.cpp"
+export outputFile="./public/build/main-asm.js"
+
 export OPTIMIZE="-Oz -Wall -Werror --llvm-lto 1 -fno-exceptions"
 export LDFLAGS="${OPTIMIZE}"
 export CFLAGS="${OPTIMIZE}"
@@ -10,12 +13,12 @@ export CXXFLAGS="${OPTIMIZE}"
 echo -e "\033[?25l" # 隐藏光标
 echo -e "\033[44;37m ============================================= \033[0m"
 echo ''
-echo -e "\033[32m[ wasm ] 开始构建   \033[0m"
+echo -e "\033[32m[ asm ] 开始构建   \033[0m"
 echo -e "\033[1A"
 (
   # Compile C/C++ code
   docker run --rm -it -v `pwd`:/src apiaryio/emcc emcc \
-    ./src-wasm/main.cpp \
+    ${inputFile} \
     ${OPTIMIZE} \
     -s MALLOC=emmalloc \
     -s EXPORT_ES6=0 \
@@ -28,7 +31,7 @@ echo -e "\033[1A"
     -s ENVIRONMENT="web" \
     --memory-init-file 0 \
     --bind \
-    -o build/main-asm.js
+    -o ${outputFile}
 )
 
     
@@ -40,8 +43,16 @@ echo -e "\033[1A"
 #  -s EXPORT_ES6=1   将JavaScript代码转换为ES6模块，其默认导出适用于任何捆绑器
 #  -s FILESYSTEM=0  是否启用文件系统
 
-echo -e "\033[32m[ wasm ] 构建完成   \033[0m"
-echo -e "\033[32m[ Path ] ./build/main-asm.js   \033[0m"
+echo -e "\033[32m[ asm ] 构建完成   \033[0m"
+echo -e "\033[32m[ Path ] ${outputFile}   \033[0m"
+
+echo -e "\033[32m[ asm ] Gzip压缩   \033[0m"
+echo -e "\033[1A"
+(
+  gzip -n -c ${outputFile} > ${outputFile}.gz
+)
+echo -e "\033[32m[ Path ] ${outputFile}.gz   \033[0m"
+
 echo ''
 echo -e "\033[44;37m ============================================= \033[0m"
 echo -e "\033[?25h" # 显示光标

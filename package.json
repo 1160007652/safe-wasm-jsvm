@@ -4,6 +4,7 @@
   "description": "wasm 安全码 校验",
   "main": "index.js",
   "scripts": {
+    "server": "http-server ./public -p 8088 -g --cors -o",
     "asm": "./config/asm_build.sh",
     "wasm": "./config/wasm_build.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -17,5 +18,8 @@
     "安全码"
   ],
   "author": "zhipan.liu@okcoin.net",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "http-server": "^0.11.1"
+  }
 }
