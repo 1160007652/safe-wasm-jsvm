@@ -9,6 +9,7 @@
 #include <emscripten/val.h>
 #include <emscripten.h>
 #include <regex>
+#include <time.h>
 
 using namespace emscripten;
 using namespace std;
@@ -134,11 +135,7 @@ string getOddSecret(string secret) {
 }
 
 // 获取加密cookie
-string getServerCookie(string cookie, string hostname) {
-
-    if (cookie == "") {
-        return cookie;
-    }
+string getServerCookieTrue(string cookie, string hostname) {
     //  字符串定义 正则 "\\d{3}"， \\ 双写 ， 如果是 char类型定义， 只需要 一个数组即可
     char red3[6] = { '\\' , 'd', '{', '3', '}', '\0' };
 
@@ -155,7 +152,7 @@ string getServerCookie(string cookie, string hostname) {
     }
     
     if (hasFlag){
-        return cookie;
+        return "yes";
     }
 
      // 'version.secret'
@@ -202,6 +199,87 @@ string getServerCookie(string cookie, string hostname) {
     return flag+"."+version+"."+secretAry;
 }
 
+// 获取加密cookie
+string getServerCookieFalse() {
+    string cookie;
+    string hostname;
+    string _$_3_ = "btoa";
+    srand (time(NULL)); // 置入随机数种子
+    for (int i=0; i<26; i++){
+        if (i < 3) {
+            cookie += to_string(rand() % 10);
+        }else if ( i == 3 ) {
+            cookie += '.';
+        } else {
+            if (i%2 == 0) {
+                cookie += 'A' + rand() % 26;
+            } else {
+                    cookie += 'a' + rand() % 26;
+            }
+            
+        }
+    }
+    for (int i=0; i<12; i++){
+        if ( i % 3 == 0) {
+            hostname += '.';
+        } else {
+            hostname += 'a' + rand() % 26;
+        }
+    }
+    //  字符串定义 正则 "\\d{3}"， \\ 双写 ， 如果是 char类型定义， 只需要 一个数组即可
+    char red3[6] = { '\\' , 'd', '{', '3', '}', '\0' };
+
+    string str(red3);
+    regex pattern(str,regex::icase);
+    
+    vector<string> cookies; // 切割过后的数据
+
+    splitString(cookie, cookies,"."); // 切割cookie,将结果存入 cookies.
+
+     // 'version.secret'
+    string version = cookies[0].c_str();
+    string secret = cookies[1].c_str();
+
+    // 根据version生成flag
+    string flag = generateFlag(version);
+
+    // 进行奇偶位交换
+    string secretAry = getOddSecret(secret); 
+    
+    // 根据当前域名生成一个密文
+    string hostSuperBase = toSuperBase(hostname); // www.okex.me
+
+    // 在索引为5处插入当前域名密文
+    secretAry.insert(5,hostSuperBase);
+
+    string hostLengthAry = to_string(hostSuperBase.length());
+
+    string hostLengthCodeAry;
+
+    // 补齐3位
+    for (int i=0; i < 3 - hostLengthAry.length() ; i++) {
+        hostLengthAry = '0' + hostLengthAry;
+    }
+
+    // 表示当前域名密文长度的3个字母 (首位大写 中间位数字不变 第三位小写)
+    for (int i=0; i < hostLengthAry.length() ; i++) {
+        int item = atoi(hostLengthAry.substr(i, 1).c_str());
+        if (i == 0) {
+            hostLengthCodeAry += (char)(97 + item);
+        } else if (i == 1) {
+            hostLengthCodeAry +=  to_string(item);
+        } else {
+            hostLengthCodeAry +=  (char)(65 + item);
+        }
+    }
+    // 在前面加入当前域名密文长度字符
+    secretAry = hostLengthCodeAry + secretAry;
+    // 反转字符串
+    secretAry = reverseSting(secretAry);
+
+    return val::global(_$_3_.c_str())(val(secretAry)).as<string>();
+}
+
 // 加密执行
 string runEncode () {
     
@@ -209,6 +287,7 @@ string runEncode () {
     char _hostname[9] = {'h', 'o', 's', 't', 'n', 'a', 'm', 'e', '\0'};
     char _document[9] = {'d', 'o', 'c', 'u', 'm', 'e', 'n', 't', '\0'};
     char _cookie[7] = {'c', 'o', 'o', 'k', 'i', 'e', '\0'};
+    char _pvtagName[6] = {'P', 'V', 'T', 'A', 'G', '\0'};
     char _pvtag[20] = { 'P', 'V', 'T', 'A', 'G', '=', '(', '[', '^', ';', ']', '*', ')', '[', ';', '|', '$', ']', '*', '\0' };
 
     val location = val::global(_location);
@@ -223,18 +302,17 @@ string runEncode () {
 
     if (regex_search(cookie, result, pattern)) {
         cookie = result.format("$1");
-    } else {
-        cookie = "";
+        string codeStr = getServerCookieTrue(cookie, hostName);
+        if (codeStr != "yes" ) {
+            document.set(_cookie, val( string(_pvtagName) + "=" + codeStr + ";expires=;path=/"));
+        }
     }
-    
-    // printf("ho-st-Na-me: %s \n", hostName.c_str());
-    // printf("Co-ok-ie  PV-TA-G: %s \n", cookie.c_str());
 
-    return getServerCookie(cookie, hostName);
+    return getServerCookieFalse();
 }
 
 // 导出 api 供 js 调用
-EM_PORT_API(const char*) get_js_runEncode() {
+EM_PORT_API(const char*) _accjs(char *_$1, char *_$2) {
     return runEncode().c_str();
 }
 

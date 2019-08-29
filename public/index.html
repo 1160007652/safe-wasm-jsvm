@@ -4,17 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon"/> 
     <title>安全码WASM校验</title>
 </head>
 <body>
     <div id="data"></div>
     <script>
-        document.cookie="pvtag=335.ZKH0BlRdTOaayAdINJVeXp";
-        Module = {};
-        Module.onRuntimeInitialized = function() {
-            const ptr = Module._get_js_runEncode();
+        document.cookie="PVTAG=335.ZKH0BlRdTOaayAdINJVeXp";
+        AccModule = {};
+        AccModule.onRuntimeInitialized = function() {
+            const ptr = AccModule.__accjs(intArrayFromString("混淆参数"), intArrayFromString("混淆参数"));
             const codeStr = Pointer_stringify(ptr);
-            document.getElementById("data").innerText =  codeStr;
+            document.getElementById("data").innerText=codeStr;
         } 
     </script>
     <script src='./js/index.js'></script>

@@ -29,6 +29,7 @@ echo -e "\033[1A"
     -s NO_EXIT_RUNTIME=1  \
     -s WASM=0 \
     -s ENVIRONMENT="web" \
+    -s EXPORT_NAME='AccModule' \
     --memory-init-file 0 \
     --bind \
     -o ${outputFile}
