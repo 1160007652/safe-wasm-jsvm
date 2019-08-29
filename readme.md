@@ -6,9 +6,8 @@ https://caniuse.com/#feat=wasm
 -----------------------
 #### 启动 server 服务：
 
-python -m http.server  8088
-
-> 也可以使用其它服务，去运行
+> 安装依赖：npm i 
+> 运行服务：npm run server
 
 ---------------------
 
@@ -32,7 +31,16 @@ python -m http.server  8088
 ------------------------
 
 #### 目录结构
-- build     // 保存构建成功的main-[wasm|asm].js文件
-- config    // 用于构建wasm 的命令配置项
-- src-fe    // html+js Demo 页面
-- src-wasm  // [c|c++] wasm 源码
+- public/              // 启动服务运行的目录
+- public/build/        // 保存构建成功的main-[wasm|asm].[js,js.gz]文件
+- public/js/           // js代码目录
+- public/index.html    // 入口
+- config/              // 配置项目录
+- config/asm_build.sh  // asm脚本命令
+- config/wasm_build.sh // wasm脚本命令
+- src-wasm/            // C++源码目录
+- src-wasm/main.cpp    // wasm 源码 
+
+#### CPU\内存分析视图
+
+切换到 profiler 分支, 运行查看
