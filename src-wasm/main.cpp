@@ -1,11 +1,3 @@
-/**
- * @author 刘智攀
- * @email zhipan.liu@okcoin.net
- * @create date 2019-07-24 16:50:27
- * @modify date 2019-07-24 16:50:27
- * @desc net 接口请求 加密
- */
-
 #include <emscripten.h>
 #include <string.h>
 #include "../lib/quickjs-2020-03-16/quickjs.h"
