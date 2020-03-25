@@ -17,7 +17,7 @@ function loadScript(url,callback = undefined) {
     document.getElementsByTagName("head")[0].appendChild(script);
 }
 
-if ( window.WebAssembly) {
+if (false && window.WebAssembly) {
     // 支持WASM浏览器的使用方式
     loadScript("../build/main-wasm.js");
 } else {

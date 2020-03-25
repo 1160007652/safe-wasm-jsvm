@@ -13,7 +13,7 @@
             const a = {a: 1, b: 2};
             const b = {c:0 , ...a};
 
-            return \`HelloWord - \${Object.keys(a)} - \${Object.values(a)}\`;
+            return \`HelloWord - \${Object.keys(b)} - \${Object.values(b)}\`;
         }
         
         say();
@@ -28,7 +28,7 @@
                 function say(){
                     const a = {a: 1, b: 2};
                     const b = {c:0 , ...a};
-                    return \`HelloWord - \${Object.keys(a)} - \${Object.values(a)}\`;
+                    return \`HelloWord - \${Object.keys(b)} - \${Object.values(b)}\`;
                 }
                 say();
             `;

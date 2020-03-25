@@ -43,5 +43,12 @@ https://caniuse.com/#feat=wasm
 - src-wasm/             C++源码目录
 - src-wasm/main.cpp     wasm 源码 
 
-#### CPU\内存分析视图
+#### wasm 运行图
 
+![Wasm-NetWork](https://raw.githubusercontent.com/hongmaju/light7Local/master/img/productShow/20170518152848.png)
+![Wasm-Sources](https://raw.githubusercontent.com/hongmaju/light7Local/master/img/productShow/20170518152848.png)
+
+#### asm 运行图
+
+![asm-NetWork](https://raw.githubusercontent.com/hongmaju/light7Local/master/img/productShow/20170518152848.png)
+![asm-Sources](https://raw.githubusercontent.com/hongmaju/light7Local/master/img/productShow/20170518152848.png)
