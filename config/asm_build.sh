@@ -2,10 +2,13 @@
 
 set -e
 
-export inputFile="./src-wasm/main.cpp"
+# 编译quickjs 根目录
+export QUICKJSHOME="./lib/quickjs-2020-03-16"
+
+export inputFile="./src-wasm/main.cpp ${QUICKJSHOME}/quickjs.c ${QUICKJSHOME}/cutils.c ${QUICKJSHOME}/libregexp.c ${QUICKJSHOME}/libbf.c ${QUICKJSHOME}/libunicode.c"
 export outputFile="./public/build/main-asm.js"
 
-export OPTIMIZE="-Oz -Wall -Werror --llvm-lto 1 -fno-exceptions"
+export OPTIMIZE="-DCONFIG_VERSION=\"1.0.0\" -lm -Oz -Wall -Werror --llvm-lto 1 -fno-exceptions"
 export LDFLAGS="${OPTIMIZE}"
 export CFLAGS="${OPTIMIZE}"
 export CXXFLAGS="${OPTIMIZE}"
@@ -30,6 +33,7 @@ echo -e "\033[1A"
     -s WASM=0 \
     -s ENVIRONMENT="web" \
     -s EXPORT_NAME='AccModule' \
+    -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
     --memory-init-file 0 \
     --bind \
     -o ${outputFile}

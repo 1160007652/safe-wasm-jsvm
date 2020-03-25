@@ -8,14 +8,35 @@
     <title>安全码WASM校验</title>
 </head>
 <body>
-    <div id="data"></div>
+    <pre>
+        function say(){
+            const a = {a: 1, b: 2};
+            const b = {c:0 , ...a};
+
+            return \`HelloWord - \${Object.keys(a)} - \${Object.values(a)}\`;
+        }
+        
+        say();
+    </pre>
+    <span>结果:</span>
+    <span id="data"></span>
     <script>
-        document.cookie="PVTAG=335.ZKH0BlRdTOaayAdINJVeXp";
         AccModule = {};
         AccModule.onRuntimeInitialized = function() {
-            const ptr = AccModule.__accjs(intArrayFromString("混淆参数"), intArrayFromString("混淆参数"));
-            const codeStr = Pointer_stringify(ptr);
-            document.getElementById("data").innerText=codeStr;
+            
+            const codeStr = `
+                function say(){
+                    const a = {a: 1, b: 2};
+                    const b = {c:0 , ...a};
+                    return \`HelloWord - \${Object.keys(a)} - \${Object.values(a)}\`;
+                }
+                say();
+            `;
+
+            const result = AccModule.ccall("eval", "string", ["string"], [codeStr]);
+            
+            document.getElementById("data").innerText=result;
+
         } 
     </script>
     <script src='./js/index.js'></script>
