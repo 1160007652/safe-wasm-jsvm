@@ -1,7 +1,7 @@
 {
-  "name": "anti-counterfeiting-code",
+  "name": "safe-wasm-jsvm",
   "version": "1.0.0",
-  "description": "wasm 安全码 校验",
+  "description": "wasm 前端安全, Quickjs",
   "main": "index.js",
   "scripts": {
     "server": "http-server ./public -p 8088 -g --cors -o",
@@ -11,13 +11,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@gitlab.okcoin-inc.com:okfe/util/anti-counterfeiting-code.git"
+    "url": "git@github.com:1160007652/safe-wasm-jsvm.git"
   },
   "keywords": [
     "wasm",
-    "安全码"
+    "前端安全",
+    "Quickjs"
   ],
-  "author": "zhipan.liu@okcoin.net",
+  "author": "1160007652@qq.com",
   "license": "ISC",
   "dependencies": {
     "http-server": "^0.11.1"

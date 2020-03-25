@@ -32,7 +32,7 @@ echo -e "\033[1A"
     -s NO_EXIT_RUNTIME=1  \
     -s WASM=0 \
     -s ENVIRONMENT="web" \
-    -s EXPORT_NAME='AccModule' \
+    -s EXPORT_NAME='SafeJSModule' \
     -s EXTRA_EXPORTED_RUNTIME_METHODS='["ccall", "cwrap"]' \
     --memory-init-file 0 \
     --bind \

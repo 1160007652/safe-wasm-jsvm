@@ -21,8 +21,8 @@
     <span>结果:</span>
     <span id="data"></span>
     <script>
-        AccModule = {};
-        AccModule.onRuntimeInitialized = function() {
+        SafeJSModule = {};
+        SafeJSModule.onRuntimeInitialized = function() {
             
             const codeStr = `
                 function say(){
@@ -33,7 +33,7 @@
                 say();
             `;
 
-            const result = AccModule.ccall("eval", "string", ["string"], [codeStr]);
+            const result = SafeJSModule.ccall("eval", "string", ["string"], [codeStr]);
             
             document.getElementById("data").innerText=result;
 
